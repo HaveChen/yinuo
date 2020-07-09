@@ -25,7 +25,7 @@ import com.ruoyi.system.service.ISysDeptService;
 
 /**
  * 部门信息
- * 
+ *
  * @author ruoyi
  */
 @Controller
@@ -153,7 +153,7 @@ public class SysDeptController extends BaseController
 
     /**
      * 选择部门树
-     * 
+     *
      * @param deptId 部门ID
      * @param excludeId 排除ID
      */

@@ -36,13 +36,6 @@ public interface IGenTableService
     public List<GenTable> selectDbTableListByNames(String[] tableNames);
 
     /**
-     * 查询所有表信息
-     * 
-     * @return 表信息集合
-     */
-    public List<GenTable> selectGenTableAll();
-
-    /**
      * 查询业务信息
      * 
      * @param id 业务ID
@@ -83,28 +76,20 @@ public interface IGenTableService
     public Map<String, String> previewCode(Long tableId);
 
     /**
-     * 生成代码（下载方式）
+     * 生成代码
      * 
      * @param tableName 表名称
      * @return 数据
      */
-    public byte[] downloadCode(String tableName);
+    public byte[] generatorCode(String tableName);
 
     /**
-     * 生成代码（自定义路径）
-     * 
-     * @param tableName 表名称
-     * @return 数据
-     */
-    public void generatorCode(String tableName);
-
-    /**
-     * 批量生成代码（下载方式）
+     * 批量生成代码
      * 
      * @param tableNames 表数组
      * @return 数据
      */
-    public byte[] downloadCode(String[] tableNames);
+    public byte[] generatorCode(String[] tableNames);
 
     /**
      * 修改保存参数校验

@@ -1,7 +1,6 @@
 package com.ruoyi.generator.util;
 
 import java.util.Arrays;
-import org.apache.commons.lang3.RegExUtils;
 import com.ruoyi.common.constant.GenConstants;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.generator.config.GenConfig;
@@ -62,7 +61,7 @@ public class GenUtils
             String[] str = StringUtils.split(StringUtils.substringBetween(column.getColumnType(), "(", ")"), ",");
             if (str != null && str.length == 2 && Integer.parseInt(str[1]) > 0)
             {
-                column.setJavaType(GenConstants.TYPE_BIGDECIMAL);
+                column.setJavaType(GenConstants.TYPE_DOUBLE);
             }
             // 如果是整形
             else if (str != null && str.length == 1 && Integer.parseInt(str[0]) <= 10)
@@ -110,11 +109,6 @@ public class GenUtils
                 || StringUtils.endsWithIgnoreCase(columnName, "sex"))
         {
             column.setHtmlType(GenConstants.HTML_SELECT);
-        }
-        // 文件字段设置上传控件
-        else if (StringUtils.endsWithIgnoreCase(columnName, "file"))
-        {
-            column.setHtmlType(GenConstants.HTML_UPLOAD);
         }
     }
 
@@ -170,31 +164,9 @@ public class GenUtils
         String tablePrefix = GenConfig.getTablePrefix();
         if (autoRemovePre && StringUtils.isNotEmpty(tablePrefix))
         {
-            String[] searchList = StringUtils.split(tablePrefix, ",");
-            tableName = replaceFirst(tableName, searchList);
+            tableName = tableName.replaceFirst(tablePrefix, "");
         }
         return StringUtils.convertToCamelCase(tableName);
-    }
-
-    /**
-     * 批量替换前缀
-     * 
-     * @param replacementm 替换值
-     * @param searchList 替换列表
-     * @return
-     */
-    public static String replaceFirst(String replacementm, String[] searchList)
-    {
-        String text = replacementm;
-        for (String searchString : searchList)
-        {
-            if (replacementm.startsWith(searchString))
-            {
-                text = replacementm.replaceFirst(searchString, "");
-                break;
-            }
-        }
-        return text;
     }
 
     /**
@@ -205,7 +177,7 @@ public class GenUtils
      */
     public static String replaceText(String text)
     {
-        return RegExUtils.replaceAll(text, "(?:表|若依)", "");
+        return text.replaceAll("(?:表|若依)", "");
     }
 
     /**
@@ -243,21 +215,5 @@ public class GenUtils
         {
             return 0;
         }
-    }
-
-    /**
-     * 获取空数组列表
-     * 
-     * @param length 长度
-     * @return 数组信息
-     */
-    public static String[] emptyList(int length)
-    {
-        String[] values = new String[length];
-        for (int i = 0; i < length; i++)
-        {
-            values[i] = StringUtils.EMPTY;
-        }
-        return values;
     }
 }

@@ -1,14 +1,17 @@
 package com.ruoyi.system.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import java.util.List;
 import com.ruoyi.system.domain.SysRoleMenu;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 角色与菜单关联表 数据层
  * 
  * @author ruoyi
  */
-public interface SysRoleMenuMapper
+@Mapper
+public interface SysRoleMenuMapper extends BaseMapper<SysRoleMenu>
 {
     /**
      * 通过角色ID删除角色和菜单关联

@@ -1,14 +1,17 @@
 package com.ruoyi.system.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import java.util.List;
 import com.ruoyi.system.domain.SysUserOnline;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 在线用户 数据层
  * 
  * @author ruoyi
  */
-public interface SysUserOnlineMapper
+@Mapper
+public interface SysUserOnlineMapper extends BaseMapper<SysUserOnline>
 {
     /**
      * 通过会话序号查询信息

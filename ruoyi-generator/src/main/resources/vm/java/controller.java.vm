@@ -1,4 +1,4 @@
-package ${packageName}.controller;
+package ${basePackage}.web.controller.${moduleName};
 
 import java.util.List;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -17,7 +17,7 @@ import ${packageName}.service.I${ClassName}Service;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
-#if($table.crud || $table.sub)
+#if($table.crud)
 import com.ruoyi.common.core.page.TableDataInfo;
 #elseif($table.tree)
 import com.ruoyi.common.utils.StringUtils;
@@ -46,20 +46,7 @@ public class ${ClassName}Controller extends BaseController
         return prefix + "/${businessName}";
     }
 
-#if($table.crud || $table.sub)
-    /**
-     * 查询${functionName}列表
-     */
-    @RequiresPermissions("${permissionPrefix}:list")
-    @PostMapping("/list")
-    @ResponseBody
-    public TableDataInfo list(${ClassName} ${className})
-    {
-        startPage();
-        List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
-        return getDataTable(list);
-    }
-#elseif($table.tree)
+#if($table.tree)
     /**
      * 查询${functionName}树列表
      */
@@ -71,23 +58,34 @@ public class ${ClassName}Controller extends BaseController
         List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
         return list;
     }
+#elseif($table.crud)
+    /**
+     * 查询${functionName}列表
+     */
+    @RequiresPermissions("${permissionPrefix}:list")
+    @PostMapping("/list")
+    @ResponseBody
+    public TableDataInfo list(${ClassName} ${className})
+    {
+        startPage();
+        return getDataTable(${className}Service.list(new QueryWrapper<>()));
+    }
 #end
 
     /**
      * 导出${functionName}列表
      */
     @RequiresPermissions("${permissionPrefix}:export")
-    @Log(title = "${functionName}", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(${ClassName} ${className})
     {
-        List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
+        List<${ClassName}> list = ${className}Service.list(new QueryWrapper<>());
         ExcelUtil<${ClassName}> util = new ExcelUtil<${ClassName}>(${ClassName}.class);
         return util.exportExcel(list, "${businessName}");
     }
 
-#if($table.crud || $table.sub)
+#if($table.crud)
     /**
      * 新增${functionName}
      */
@@ -120,7 +118,7 @@ public class ${ClassName}Controller extends BaseController
     @ResponseBody
     public AjaxResult addSave(${ClassName} ${className})
     {
-        return toAjax(${className}Service.insert${ClassName}(${className}));
+        return toAjax(${className}Service.save(${className}));
     }
 
     /**
@@ -129,7 +127,7 @@ public class ${ClassName}Controller extends BaseController
     @GetMapping("/edit/{${pkColumn.javaField}}")
     public String edit(@PathVariable("${pkColumn.javaField}") ${pkColumn.javaType} ${pkColumn.javaField}, ModelMap mmap)
     {
-        ${ClassName} ${className} = ${className}Service.select${ClassName}ById(${pkColumn.javaField});
+        ${ClassName} ${className} = ${className}Service.getById(${pkColumn.javaField});
         mmap.put("${className}", ${className});
         return prefix + "/edit";
     }
@@ -143,10 +141,10 @@ public class ${ClassName}Controller extends BaseController
     @ResponseBody
     public AjaxResult editSave(${ClassName} ${className})
     {
-        return toAjax(${className}Service.update${ClassName}(${className}));
+        return toAjax(${className}Service.updateById(${className}));
     }
 
-#if($table.crud || $table.sub)
+#if($table.crud)
     /**
      * 删除${functionName}
      */
@@ -156,7 +154,7 @@ public class ${ClassName}Controller extends BaseController
     @ResponseBody
     public AjaxResult remove(String ids)
     {
-        return toAjax(${className}Service.delete${ClassName}ByIds(ids));
+        return toAjax(${className}Service.removeByIds(Arrays.asList(Convert.toStrArray(ids))));
     }
 #elseif($table.tree)
     /**
