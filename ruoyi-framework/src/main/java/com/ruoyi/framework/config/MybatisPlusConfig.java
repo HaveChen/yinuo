@@ -8,19 +8,25 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@EnableTransactionManagement(proxyTargetClass = true)
+
+@EnableTransactionManagement(proxyTargetClass = true)//开启事务
 @Configuration
 @MapperScan("com.ruoyi.**.mapper*")
 public class MybatisPlusConfig {
 
   /*
-   * 分页插件，自动识别数据库类型
+   * 分页插件
    */
   @Bean
   public PaginationInterceptor paginationInterceptor() {
+
     return new PaginationInterceptor();
   }
 
+  /**
+   * 乐观锁插件
+   * @return
+   */
   @Bean
   public OptimisticLockerInterceptor optimisticLockerInterceptor() {
     return new OptimisticLockerInterceptor();
